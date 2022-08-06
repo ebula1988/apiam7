@@ -8,8 +8,5 @@ router.get("/",hardwareController.getHardware );
 router.post("/",hardwareController.addHardware);
 
 
-
-
-
 export default router; 
-//module.exports = router;
+
