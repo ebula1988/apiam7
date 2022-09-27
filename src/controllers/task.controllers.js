@@ -1,6 +1,7 @@
 import { getConnection } from "./../database/database";
 
 const getTaskId = async (req, res) => {
+    
     try {
         const { idEquipo } = req.params;
         const connection = await getConnection();

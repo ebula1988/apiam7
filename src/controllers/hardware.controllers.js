@@ -11,18 +11,31 @@ const getHardware= async (req, res)=>{
     }
 }
 
+const getHardwareId = async (req, res) => {
+    
+    try {
+        const { idCliente } = req.params;
+        const connection = await getConnection();
+        const result = await connection.query("SELECT * FROM equipos WHERE idCliente =?",idCliente  );
+        res.json(result);
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
 const addHardware = async (req, res) => {
     try {
-        const { idEquipo, tarea } = req.body;
+        const { idCliente,nombreEquipo, modeloEquipo, marcaEquipo, ubicacionEquipo, serieEquipo } = req.body;
 
-        if (idEquipo === undefined || tarea === undefined )  {
+        if (idCliente === undefined || nombreEquipo === undefined || modeloEquipo === undefined || marcaEquipo === undefined || ubicacionEquipo === undefined || serieEquipo === undefined )  {
             res.status(400).json({ message: "Registre todos los datos" });
         }
 
-        const TareaRegistro = { idequipo, tarea};
+        const equipoRegistro = { idCliente,nombreEquipo, modeloEquipo, marcaEquipo, ubicacionEquipo, serieEquipo};
         const connection = await getConnection();
-        await connection.query("INSERT INTO equipos SET ?", TareaRegistro);
-        res.json({ message: "Equipo agregado con exito" });
+        await connection.query("INSERT INTO equipos SET ?", equipoRegistro);
+        res.json({ message: "Equipo agregado al cliente con exito" });
     } catch (error) {
         res.status(500);
         res.send(error.message);
@@ -31,6 +44,7 @@ const addHardware = async (req, res) => {
 
 export const methods = {
     getHardware,
-    addHardware
+    addHardware,
+    getHardwareId
    
 }

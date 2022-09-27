@@ -8,6 +8,8 @@ router.get("/", clienteController.getClientes );
 router.post("/", clienteController.addCliente);
 router.get("/:idCliente",clienteController.getCliente );
 router.delete("/:idCliente", clienteController.deleteCliente);
+
+router.post("/remove", clienteController.removeCliente);
 router.put("/:idcliente", clienteController.updateCliente);
 
 

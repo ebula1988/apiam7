@@ -1,13 +1,10 @@
-//import {getConnection} from "../database/database";
 import { getConnection } from "./../database/database";
-
-
-
 
 const getClientes= async (req, res)=>{
     try{
         const connection= await getConnection();
-    const result = await connection.query("SELECT idCliente, nombreCliente, ciudadCliente FROM clientes ");
+    const result = await connection.query("SELECT * FROM clientes order by idcliente DESC ");
+
 
     res.json(result);
 
@@ -21,13 +18,13 @@ const getClientes= async (req, res)=>{
 
 const addCliente = async (req, res) => {
     try {
-        const { nombreCliente, ciudadCliente } = req.body;
+        const { nombres,nit, ciudad, direccion, telefono,email } = req.body;
 
-        if (nombreCliente === undefined || ciudadCliente === undefined) {
+        if (nombres === undefined || nit === undefined || ciudad === undefined || telefono === undefined || email === undefined) {
             res.status(400).json({ message: "Registre todos los datos" });
         }
 
-        const clienteRegistro = { nombreCliente, ciudadCliente };
+        const clienteRegistro = { nombres,nit, ciudad, direccion, telefono,email };
         const connection = await getConnection();
         await connection.query("INSERT INTO clientes SET ?", clienteRegistro);
         res.json({ message: "Cliente agregado con exito" });
@@ -42,7 +39,7 @@ const getCliente = async (req, res) => {
         console.log(req.params);
         const { idCliente } = req.params;
         const connection = await getConnection();
-        const result = await connection.query("SELECT idCliente, nombreCliente, ciudadCliente FROM clientes WHERE idCliente = ?", idCliente);
+        const result = await connection.query("SELECT * FROM clientes WHERE idCliente = ?", idCliente );
         res.json(result);
     } catch (error) {
         res.status(500);
@@ -56,6 +53,22 @@ const deleteCliente = async (req, res) => {
         const connection = await getConnection();
         const result = await connection.query("DELETE FROM clientes WHERE idCliente = ?", idCliente);
         res.json(result);
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
+
+const removeCliente = async (req, res) => {
+    try {
+        const { idCliente } = req.body;
+
+
+        const clienteElminar = { idCliente };
+        const connection = await getConnection();
+        await connection.query("DELETE FROM clientes SET ?", clienteElminar);
+        res.json({ message: "Cliente agregado con exito" });
     } catch (error) {
         res.status(500);
         res.send(error.message);
@@ -97,5 +110,6 @@ export const methods = {
     addCliente,
     getCliente,
     deleteCliente,
-    updateCliente
+    updateCliente,
+    removeCliente
 }
